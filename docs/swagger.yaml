@@ -1,0 +1,720 @@
+definitions:
+  models.Book:
+    properties:
+      author:
+        description: Book author
+        example: Mr. Cccc Dddd
+        type: string
+      category:
+        description: Book category
+        example: Sea
+        type: string
+      created_at:
+        description: Model Created At
+        example: "2021-02-02 11:11:11"
+        type: string
+      id:
+        description: Model id pk
+        type: integer
+      name:
+        description: Book name
+        example: Mr. Aaaa Bbbbb
+        type: string
+      uid:
+        description: Model UUID
+        type: string
+      updated_at:
+        description: Model UPdated At
+        example: "2021-02-02 11:11:11"
+        type: string
+    type: object
+  models.BookForCreate:
+    properties:
+      author:
+        description: Book author
+        example: Mr. Cccc Dddd
+        type: string
+      category:
+        description: Book category
+        example: Sea
+        type: string
+      name:
+        description: Book name
+        example: Mr. Aaaa Bbbbb
+        type: string
+    type: object
+  models.BookForUpdate:
+    properties:
+      author:
+        description: Book author
+        example: Mr. Cccc Dddd
+        type: string
+      category:
+        description: Book category
+        example: Sea
+        type: string
+      name:
+        description: Book name
+        example: Mr. Aaaa Bbbbb
+        type: string
+    type: object
+  models.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    type: object
+  models.Permission:
+    properties:
+      created_at:
+        description: Model Created At
+        example: "2021-02-02 11:11:11"
+        type: string
+      desc:
+        description: Permission desc
+        example: คำอธิบาย
+        type: string
+      id:
+        description: Permission id
+        example: 1
+        type: integer
+      name:
+        description: Permission name
+        example: create table
+        type: string
+      slug:
+        description: Permission slug
+        example: /aa
+        type: string
+      uid:
+        description: Model UUID
+        type: string
+      updated_at:
+        description: Model UPdated At
+        example: "2021-02-02 11:11:11"
+        type: string
+    type: object
+  models.Role:
+    properties:
+      created_at:
+        description: Model Created At
+        example: "2021-02-02 11:11:11"
+        type: string
+      id:
+        description: Role id
+        example: 1
+        type: integer
+      name:
+        description: Role name
+        example: Admin
+        type: string
+      permissions:
+        description: Role permission
+        items:
+          $ref: '#/definitions/models.Permission'
+        type: array
+      uid:
+        description: Model UUID
+        type: string
+      updated_at:
+        description: Model UPdated At
+        example: "2021-02-02 11:11:11"
+        type: string
+    type: object
+  models.User:
+    properties:
+      created_at:
+        description: Model Created At
+        example: "2021-02-02 11:11:11"
+        type: string
+      email:
+        description: User email
+        example: a@email.com
+        type: string
+      id:
+        description: Model id pk
+        type: integer
+      level:
+        description: User level
+        example: 99
+        type: integer
+      name:
+        description: User password
+        example: 'Mr. A '
+        type: string
+      password:
+        description: User password
+        example: P@ssw0rd999
+        type: string
+      reftoken:
+        description: User token
+        example: aaaaa.bbbbbb.cccccc
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/models.Role'
+        type: array
+      telephone:
+        description: User telephone
+        example: "0816477729"
+        type: string
+      uid:
+        description: Model UUID
+        type: string
+      updated_at:
+        description: Model UPdated At
+        example: "2021-02-02 11:11:11"
+        type: string
+      username:
+        description: User name
+        example: usera
+        type: string
+    type: object
+  utils.ResponseData:
+    properties:
+      status:
+        description: Response status
+        type: integer
+      success:
+        default: true
+        description: Response success
+        example: true
+        type: boolean
+    type: object
+info:
+  contact:
+    email: limweb@hotmail.com
+    name: API Support
+    url: http://www.servit.co.th/support
+  description: '# Manageing Customer API'
+  license:
+    name: The MIT License
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://www.servit.co.th/
+  title: ApiTest
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: Message for the service
+      operationId: Message
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      summary: Message
+  /api/v1/books/all:
+    get:
+      consumes:
+      - application/json
+      description: List all books
+      operationId: ListBooks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Book'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Books
+      tags:
+      - books
+  /api/v1/books/by/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get book by id
+      operationId: GetBook
+      parameters:
+      - description: id of book to be gotten
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - Basic auth: []
+      summary: Get Book
+      tags:
+      - books
+  /api/v1/books/del/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Delete book by id
+      operationId: DeleteBook
+      parameters:
+      - description: id of book to be deleted
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Book
+      tags:
+      - books
+  /api/v1/books/edit/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Update book by id
+      operationId: UpdateBook
+      parameters:
+      - description: id of book to be updated
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book data to be updated
+        in: body
+        name: Book
+        required: true
+        schema:
+          $ref: '#/definitions/models.BookForUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Book
+      tags:
+      - books
+  /api/v1/books/last:
+    get:
+      consumes:
+      - application/json
+      description: List all books
+      operationId: ListlastBooks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Book'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Books
+      tags:
+      - books
+  /api/v1/books/new:
+    post:
+      consumes:
+      - application/json
+      description: Create new book
+      operationId: CreateBook
+      parameters:
+      - description: Book data to be created
+        in: body
+        name: Book
+        required: true
+        schema:
+          $ref: '#/definitions/models.BookForCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Book
+      tags:
+      - books
+  /api/v1/books/vuetable:
+    get:
+      consumes:
+      - application/json
+      description: List all books with pagination keyword filter by column Sort columns
+      operationId: vuetableBook
+      parameters:
+      - description: number of page
+        in: query
+        name: page
+        type: string
+      - description: get number of per_page
+        in: query
+        name: per_page
+        type: string
+      - description: 'soft by cols exm: col1|asc,col2|desc'
+        in: query
+        name: sort
+        type: string
+      - description: 'search with column exm: col1|aaa,col2|bbb  by filter'
+        in: query
+        name: filter
+        type: string
+      - description: 'search by kw exm: aaa bbb ccc '
+        in: query
+        name: kw
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Book'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Books use VueTable
+      tags:
+      - books
+  /emailverify:
+    get:
+      consumes:
+      - application/json
+      description: List all auths
+      operationId: Emailverify
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Login'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Auths
+      tags:
+      - auths
+  /healthcheck:
+    get:
+      description: Health checking for the service
+      operationId: HealthCheckHandler
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health Check
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login with username/email  and password
+      operationId: Login
+      parameters:
+      - description: Login info
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/models.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      summary: Login Auths
+      tags:
+      - auths
+  /ping:
+    get:
+      description: Ping for the service
+      operationId: Ping
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      summary: Ping
+  /refreshtoken:
+    get:
+      consumes:
+      - application/json
+      description: List all auths
+      operationId: Refreshtoken
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Login'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Auths
+      tags:
+      - auths
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register User
+      operationId: Register
+      parameters:
+      - description: User info
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Login'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      summary: Register Auths
+      tags:
+      - auths
+  /resetpass:
+    post:
+      consumes:
+      - application/json
+      description: List all auths
+      operationId: Resetpass
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Login'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Auths
+      tags:
+      - auths
+  /test:
+    get:
+      description: Ping for the service
+      operationId: Test
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      summary: Ping
+schemes:
+- https
+- http
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

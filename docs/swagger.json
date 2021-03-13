@@ -1,0 +1,1069 @@
+{
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "# Manageing Customer API",
+        "title": "ApiTest",
+        "termsOfService": "http://www.servit.co.th/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.servit.co.th/support",
+            "email": "limweb@hotmail.com"
+        },
+        "license": {
+            "name": "The MIT License",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Message for the service",
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "Message",
+                "operationId": "Message",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/books/all": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all books",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "List Books",
+                "operationId": "ListBooks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Book"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/books/by/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "Basic auth": []
+                    }
+                ],
+                "description": "Get book by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get Book",
+                "operationId": "GetBook",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of book to be gotten",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/books/del/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete book by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Delete Book",
+                "operationId": "DeleteBook",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of book to be deleted",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/books/edit/{id}": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update book by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Update Book",
+                "operationId": "UpdateBook",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of book to be updated",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Book data to be updated",
+                        "name": "Book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BookForUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/books/last": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all books",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "List Books",
+                "operationId": "ListlastBooks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Book"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/books/new": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new book",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Create Book",
+                "operationId": "CreateBook",
+                "parameters": [
+                    {
+                        "description": "Book data to be created",
+                        "name": "Book",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BookForCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/books/vuetable": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all books with pagination keyword filter by column Sort columns",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "List Books use VueTable",
+                "operationId": "vuetableBook",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "number of page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "get number of per_page",
+                        "name": "per_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "soft by cols exm: col1|asc,col2|desc",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search with column exm: col1|aaa,col2|bbb  by filter",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search by kw exm: aaa bbb ccc ",
+                        "name": "kw",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Book"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/emailverify": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all auths",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auths"
+                ],
+                "summary": "List Auths",
+                "operationId": "Emailverify",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Login"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/healthcheck": {
+            "get": {
+                "description": "Health checking for the service",
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "Health Check",
+                "operationId": "HealthCheckHandler",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Login with username/email  and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auths"
+                ],
+                "summary": "Login Auths",
+                "operationId": "Login",
+                "parameters": [
+                    {
+                        "description": "Login info",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.User"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "description": "Ping for the service",
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "Ping",
+                "operationId": "Ping",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/refreshtoken": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all auths",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auths"
+                ],
+                "summary": "List Auths",
+                "operationId": "Refreshtoken",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Login"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "description": "Register User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auths"
+                ],
+                "summary": "Register Auths",
+                "operationId": "Register",
+                "parameters": [
+                    {
+                        "description": "User info",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Login"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/resetpass": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List all auths",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auths"
+                ],
+                "summary": "List Auths",
+                "operationId": "Resetpass",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Login"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/test": {
+            "get": {
+                "description": "Ping for the service",
+                "produces": [
+                    "text/plain"
+                ],
+                "summary": "Ping",
+                "operationId": "Test",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseData"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Book": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "Book author",
+                    "type": "string",
+                    "example": "Mr. Cccc Dddd"
+                },
+                "category": {
+                    "description": "Book category",
+                    "type": "string",
+                    "example": "Sea"
+                },
+                "created_at": {
+                    "description": "Model Created At",
+                    "type": "string",
+                    "example": "2021-02-02 11:11:11"
+                },
+                "id": {
+                    "description": "Model id pk",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Book name",
+                    "type": "string",
+                    "example": "Mr. Aaaa Bbbbb"
+                },
+                "uid": {
+                    "description": "Model UUID",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "Model UPdated At",
+                    "type": "string",
+                    "example": "2021-02-02 11:11:11"
+                }
+            }
+        },
+        "models.BookForCreate": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "Book author",
+                    "type": "string",
+                    "example": "Mr. Cccc Dddd"
+                },
+                "category": {
+                    "description": "Book category",
+                    "type": "string",
+                    "example": "Sea"
+                },
+                "name": {
+                    "description": "Book name",
+                    "type": "string",
+                    "example": "Mr. Aaaa Bbbbb"
+                }
+            }
+        },
+        "models.BookForUpdate": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "Book author",
+                    "type": "string",
+                    "example": "Mr. Cccc Dddd"
+                },
+                "category": {
+                    "description": "Book category",
+                    "type": "string",
+                    "example": "Sea"
+                },
+                "name": {
+                    "description": "Book name",
+                    "type": "string",
+                    "example": "Mr. Aaaa Bbbbb"
+                }
+            }
+        },
+        "models.Login": {
+            "type": "object",
+            "required": [
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Permission": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "Model Created At",
+                    "type": "string",
+                    "example": "2021-02-02 11:11:11"
+                },
+                "desc": {
+                    "description": "Permission desc",
+                    "type": "string",
+                    "example": "คำอธิบาย"
+                },
+                "id": {
+                    "description": "Permission id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "Permission name",
+                    "type": "string",
+                    "example": "create table"
+                },
+                "slug": {
+                    "description": "Permission slug",
+                    "type": "string",
+                    "example": "/aa"
+                },
+                "uid": {
+                    "description": "Model UUID",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "Model UPdated At",
+                    "type": "string",
+                    "example": "2021-02-02 11:11:11"
+                }
+            }
+        },
+        "models.Role": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "Model Created At",
+                    "type": "string",
+                    "example": "2021-02-02 11:11:11"
+                },
+                "id": {
+                    "description": "Role id",
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "description": "Role name",
+                    "type": "string",
+                    "example": "Admin"
+                },
+                "permissions": {
+                    "description": "Role permission",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Permission"
+                    }
+                },
+                "uid": {
+                    "description": "Model UUID",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "Model UPdated At",
+                    "type": "string",
+                    "example": "2021-02-02 11:11:11"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "Model Created At",
+                    "type": "string",
+                    "example": "2021-02-02 11:11:11"
+                },
+                "email": {
+                    "description": "User email",
+                    "type": "string",
+                    "example": "a@email.com"
+                },
+                "id": {
+                    "description": "Model id pk",
+                    "type": "integer"
+                },
+                "level": {
+                    "description": "User level",
+                    "type": "integer",
+                    "example": 99
+                },
+                "name": {
+                    "description": "User password",
+                    "type": "string",
+                    "example": "Mr. A "
+                },
+                "password": {
+                    "description": "User password",
+                    "type": "string",
+                    "example": "P@ssw0rd999"
+                },
+                "reftoken": {
+                    "description": "User token",
+                    "type": "string",
+                    "example": "aaaaa.bbbbbb.cccccc"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Role"
+                    }
+                },
+                "telephone": {
+                    "description": "User telephone",
+                    "type": "string",
+                    "example": "0816477729"
+                },
+                "uid": {
+                    "description": "Model UUID",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "Model UPdated At",
+                    "type": "string",
+                    "example": "2021-02-02 11:11:11"
+                },
+                "username": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "usera"
+                }
+            }
+        },
+        "utils.ResponseData": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "description": "Response status",
+                    "type": "integer"
+                },
+                "success": {
+                    "description": "Response success",
+                    "type": "boolean",
+                    "default": true,
+                    "example": true
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
