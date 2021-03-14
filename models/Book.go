@@ -22,3 +22,4 @@ type BookForUpdate struct {
 func (m *Book) TableName() string {
 	return "books"
 }
+

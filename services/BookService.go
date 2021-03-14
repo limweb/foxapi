@@ -20,6 +20,7 @@ func GetAllIdDescBook(b *[]models.Book) (err error) {
 	return nil
 }
 
+
 func AddNewBook(b *models.Book) (err error) {
 	if err = db.GetDB().Create(b).Error; err != nil {
 		return err

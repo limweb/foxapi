@@ -250,7 +250,7 @@ func vuetableBook(c *gin.Context) {
 	// ############################################################ start
 	// columns ที่ต้องการให้ค้นหาด้วย keyword รวม
 	// cols := []string{"name", "author", "category"} //ต้องกำหนดเอง example
-	cols := []string{} //ต้องกำหนดเอง
+	cols := []string{"name", "author"} //ต้องกำหนดเอง
 	// keywork single search #1
 	if paging.Kw != "" {
 		for _, col := range cols {

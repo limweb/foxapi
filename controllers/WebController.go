@@ -13,7 +13,7 @@ import (
 // @summary Message
 // @description Message for the service
 // @id Message
-// plain json xml x-www-form-urlencoded
+// plain json xml x-www-form-urlenoded
 // @produce plain
 // @response 200 {object} utils.ResponseData "OK"
 // get post put delete patch
@@ -21,6 +21,8 @@ import (
 func Message(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Welcome to WebApi V0.0.1",
+		"aaa":     "aaaa",
+		"bbb":     "bbbbb",
 	})
 }
 

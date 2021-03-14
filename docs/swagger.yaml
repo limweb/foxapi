@@ -58,6 +58,49 @@ definitions:
         example: Mr. Aaaa Bbbbb
         type: string
     type: object
+  models.Comment:
+    properties:
+      comment:
+        description: Comment comment
+        type: string
+      created_at:
+        description: Model Created At
+        example: "2021-02-02 11:11:11"
+        type: string
+      id:
+        description: Model id pk
+        type: integer
+      post:
+        $ref: '#/definitions/models.Post'
+      post_id:
+        description: Comment postid
+        type: string
+      uid:
+        description: Model UUID
+        type: string
+      updated_at:
+        description: Model UPdated At
+        example: "2021-02-02 11:11:11"
+        type: string
+    type: object
+  models.CommentForCreate:
+    properties:
+      comment:
+        description: Comment comment
+        type: string
+      post_id:
+        description: Comment postid
+        type: string
+    type: object
+  models.CommentForUpdate:
+    properties:
+      comment:
+        description: Comment comment
+        type: string
+      post_id:
+        description: Comment postid
+        type: string
+    type: object
   models.Login:
     properties:
       email:
@@ -98,6 +141,64 @@ definitions:
         description: Model UPdated At
         example: "2021-02-02 11:11:11"
         type: string
+    type: object
+  models.Post:
+    properties:
+      comments:
+        description: HasMany
+        items:
+          $ref: '#/definitions/models.Comment'
+        type: array
+      created_at:
+        description: Model Created At
+        example: "2021-02-02 11:11:11"
+        type: string
+      desc:
+        description: Post desc
+        type: string
+      id:
+        description: Model id pk
+        type: integer
+      title:
+        description: Post title
+        type: string
+      uid:
+        description: Model UUID
+        type: string
+      updated_at:
+        description: Model UPdated At
+        example: "2021-02-02 11:11:11"
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        description: Post useri
+        type: string
+    type: object
+  models.PostForCreate:
+    properties:
+      desc:
+        description: Post desc
+        type: string
+      title:
+        description: Post title
+        type: string
+    type: object
+  models.PostForUpdate:
+    properties:
+      desc:
+        description: Post desc
+        type: string
+      title:
+        description: Post title
+        type: string
+    type: object
+  models.Posts:
+    properties:
+      posts:
+        items:
+          $ref: '#/definitions/models.Posts'
+        type: array
     type: object
   models.Role:
     properties:
@@ -151,6 +252,11 @@ definitions:
         description: User password
         example: P@ssw0rd999
         type: string
+      posts:
+        description: user hasMany  Post  เอา  user_id
+        items:
+          $ref: '#/definitions/models.Posts'
+        type: array
       reftoken:
         description: User token
         example: aaaaa.bbbbbb.cccccc
@@ -169,6 +275,60 @@ definitions:
       updated_at:
         description: Model UPdated At
         example: "2021-02-02 11:11:11"
+        type: string
+      username:
+        description: User name
+        example: usera
+        type: string
+    type: object
+  models.UserForCreate:
+    properties:
+      email:
+        description: User email
+        example: a@email.com
+        type: string
+      level:
+        description: User level
+        example: 99
+        type: integer
+      name:
+        description: User password
+        example: 'Mr. A '
+        type: string
+      password:
+        description: User password
+        example: P@ssw0rd999
+        type: string
+      reftoken:
+        description: User token
+        example: aaaaa.bbbbbb.cccccc
+        type: string
+      telephone:
+        description: User telephone
+        example: "0816477729"
+        type: string
+      username:
+        description: User name
+        example: usera
+        type: string
+    type: object
+  models.UserForUpdate:
+    properties:
+      email:
+        description: User email
+        example: a@email.com
+        type: string
+      name:
+        description: User password
+        example: 'Mr. A '
+        type: string
+      password:
+        description: User password
+        example: P@ssw0rd999
+        type: string
+      telephone:
+        description: User telephone
+        example: "0816477729"
         type: string
       username:
         description: User name
@@ -499,6 +659,871 @@ paths:
       summary: List Books use VueTable
       tags:
       - books
+  /api/v1/comments/all:
+    get:
+      consumes:
+      - application/json
+      description: List all comments
+      operationId: ListComments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Comment'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Comments
+      tags:
+      - comments
+  /api/v1/comments/by/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get comment by id
+      operationId: GetComment
+      parameters:
+      - description: id of comment to be gotten
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - Basic auth: []
+      summary: Get Comment
+      tags:
+      - comments
+  /api/v1/comments/del/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Delete comment by id
+      operationId: DeleteComment
+      parameters:
+      - description: id of comment to be deleted
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Comment
+      tags:
+      - comments
+  /api/v1/comments/edit/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Update comment by id
+      operationId: UpdateComment
+      parameters:
+      - description: id of comment to be updated
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Comment data to be updated
+        in: body
+        name: Comment
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommentForUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Comment
+      tags:
+      - comments
+  /api/v1/comments/last:
+    get:
+      consumes:
+      - application/json
+      description: List all comments
+      operationId: ListlastComments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Comment'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Comments
+      tags:
+      - comments
+  /api/v1/comments/new:
+    post:
+      consumes:
+      - application/json
+      description: Create new comment
+      operationId: CreateComment
+      parameters:
+      - description: Comment data to be created
+        in: body
+        name: Comment
+        required: true
+        schema:
+          $ref: '#/definitions/models.CommentForCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Comment
+      tags:
+      - comments
+  /api/v1/comments/vuetable:
+    get:
+      consumes:
+      - application/json
+      description: List all comments with pagination keyword filter by column Sort
+        columns
+      operationId: vuetableComment
+      parameters:
+      - description: number of page
+        in: query
+        name: page
+        type: string
+      - description: get number of per_page
+        in: query
+        name: per_page
+        type: string
+      - description: 'soft by cols exm: col1|asc,col2|desc'
+        in: query
+        name: sort
+        type: string
+      - description: 'search with column exm: col1|aaa,col2|bbb  by filter'
+        in: query
+        name: filter
+        type: string
+      - description: 'search by kw exm: aaa bbb ccc '
+        in: query
+        name: kw
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Comment'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Comments use VueTable
+      tags:
+      - comments
+  /api/v1/posts/all:
+    get:
+      consumes:
+      - application/json
+      description: List all posts
+      operationId: ListPosts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Post'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Posts
+      tags:
+      - posts
+  /api/v1/posts/by/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get post by id
+      operationId: GetPost
+      parameters:
+      - description: id of post to be gotten
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - Basic auth: []
+      summary: Get Post
+      tags:
+      - posts
+  /api/v1/posts/del/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Delete post by id
+      operationId: DeletePost
+      parameters:
+      - description: id of post to be deleted
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Post
+      tags:
+      - posts
+  /api/v1/posts/edit/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Update post by id
+      operationId: UpdatePost
+      parameters:
+      - description: id of post to be updated
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Post data to be updated
+        in: body
+        name: Post
+        required: true
+        schema:
+          $ref: '#/definitions/models.PostForUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Post
+      tags:
+      - posts
+  /api/v1/posts/last:
+    get:
+      consumes:
+      - application/json
+      description: List all posts
+      operationId: ListlastPosts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.Post'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Posts
+      tags:
+      - posts
+  /api/v1/posts/new:
+    post:
+      consumes:
+      - application/json
+      description: Create new post
+      operationId: CreatePost
+      parameters:
+      - description: Post data to be created
+        in: body
+        name: Post
+        required: true
+        schema:
+          $ref: '#/definitions/models.PostForCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Post
+      tags:
+      - posts
+  /api/v1/posts/vuetable:
+    get:
+      consumes:
+      - application/json
+      description: List all posts with pagination keyword filter by column Sort columns
+      operationId: vuetablePost
+      parameters:
+      - description: number of page
+        in: query
+        name: page
+        type: string
+      - description: get number of per_page
+        in: query
+        name: per_page
+        type: string
+      - description: 'soft by cols exm: col1|asc,col2|desc'
+        in: query
+        name: sort
+        type: string
+      - description: 'search with column exm: col1|aaa,col2|bbb  by filter'
+        in: query
+        name: filter
+        type: string
+      - description: 'search by kw exm: aaa bbb ccc '
+        in: query
+        name: kw
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Post'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Posts use VueTable
+      tags:
+      - posts
+  /api/v1/users/all:
+    get:
+      consumes:
+      - application/json
+      description: List all users
+      operationId: ListUsers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.User'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Users
+      tags:
+      - users
+  /api/v1/users/by/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user by id
+      operationId: GetUser
+      parameters:
+      - description: id of user to be gotten
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - Basic auth: []
+      summary: Get User
+      tags:
+      - users
+  /api/v1/users/del/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Delete user by id
+      operationId: DeleteUser
+      parameters:
+      - description: id of user to be deleted
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete User
+      tags:
+      - users
+  /api/v1/users/edit/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Update user by id
+      operationId: UpdateUser
+      parameters:
+      - description: id of user to be updated
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User data to be updated
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserForUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Update User
+      tags:
+      - users
+  /api/v1/users/last:
+    get:
+      consumes:
+      - application/json
+      description: List all users
+      operationId: ListlastUsers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/models.User'
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Users
+      tags:
+      - users
+  /api/v1/users/new:
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      operationId: CreateUser
+      parameters:
+      - description: User data to be created
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserForCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: Create User
+      tags:
+      - users
+  /api/v1/users/vuetable:
+    get:
+      consumes:
+      - application/json
+      description: List all users with pagination keyword filter by column Sort columns
+      operationId: vuetableUser
+      parameters:
+      - description: number of page
+        in: query
+        name: page
+        type: string
+      - description: get number of per_page
+        in: query
+        name: per_page
+        type: string
+      - description: 'soft by cols exm: col1|asc,col2|desc'
+        in: query
+        name: sort
+        type: string
+      - description: 'search with column exm: col1|aaa,col2|bbb  by filter'
+        in: query
+        name: filter
+        type: string
+      - description: 'search by kw exm: aaa bbb ccc '
+        in: query
+        name: kw
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+      security:
+      - ApiKeyAuth: []
+      summary: List Users use VueTable
+      tags:
+      - users
   /emailverify:
     get:
       consumes:
@@ -699,7 +1724,7 @@ paths:
       - auths
   /test:
     get:
-      description: Ping for the service
+      description: test User Relagion with user->role->permission
       operationId: Test
       produces:
       - text/plain

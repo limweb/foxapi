@@ -15,6 +15,7 @@ type User struct {
 	ModelDefault
 	UserForCreate
 	Roles []*Role `gorm:"many2many:role_users"`
+	Posts []Post  // user hasMany  Post  เอา  user_id
 }
 
 type UserForCreate struct {
